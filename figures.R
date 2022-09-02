@@ -12,6 +12,7 @@ hrbrthemes::import_roboto_condensed()
 # Configuration variables ------------------------------------------------------
 
 BASE_SIZE <- 12
+DPI <- 100
 
 default_theme <- list(
   theme_ipsum_rc(grid = "X", 
@@ -20,7 +21,7 @@ default_theme <- list(
                  axis_title_size = BASE_SIZE + 1)
 )
 
-flipped_barplot_theme <- list(
+flipped_theme <- list(
   coord_flip(),
   theme_ipsum_rc(grid = "X", 
                  base_size = BASE_SIZE,
@@ -31,7 +32,7 @@ flipped_barplot_theme <- list(
                                                scientific = FALSE))
 )
 
-barplot_theme <- list(
+non_flipped_theme <- list(
   theme_ipsum_rc(grid = "Y", 
                  base_size = BASE_SIZE,
                  plot_title_size = BASE_SIZE + 2,
@@ -60,7 +61,7 @@ fig1 <- df %>%
              label=format(n, big.mark = ","))) +
     geom_bar(stat="identity") +
     geom_bar_text() +
-    flipped_barplot_theme +
+    flipped_theme +
     theme(aspect.ratio = 1) +
     labs(title="Number of cars by the top 10 manufacturers",
          subtitle = "Mercedes and Volkswagen are the leading car manufacturers",
@@ -68,7 +69,7 @@ fig1 <- df %>%
          x="Manufacturer")
 
 ggsave(plot = fig1,
-       dpi=300,
+       dpi=DPI,
        path = "./figures",
        filename = "fig1.png")
 
@@ -85,7 +86,7 @@ fig2 <- df %>%
                    y=0, 
                    yend=n)) +
   geom_text(hjust=-.25) +
-  flipped_barplot_theme +
+  flipped_theme +
   theme(aspect.ratio = 1) +
   ylim(0, 400) +
   labs(title="Number of hybrid cars by manufacturers",
@@ -94,7 +95,7 @@ fig2 <- df %>%
        x="Manufacturer")
 
 ggsave(plot = fig2,
-       dpi=300,
+       dpi=DPI,
        path = "./figures",
        filename = "fig2.png")
 
@@ -114,7 +115,7 @@ fig3 <- df %>%
     geom_bar(stat="identity") +
     geom_bar_text(position = "stack", place="right") +
     scale_fill_ipsum(na.value="grey") +
-    flipped_barplot_theme +
+    flipped_theme +
     labs(title="Car line distribution, by the top 10 manufacturers",
          subtitle = "Mercedes and Volkswagen are the leading car manufacturers",
          y="Percentage of cars",
@@ -122,7 +123,7 @@ fig3 <- df %>%
          fill="Car line")
 
 ggsave(plot = fig3,
-       dpi=300,
+       dpi=DPI,
        path = "./figures",
        filename = "fig3.png")
 
@@ -136,7 +137,7 @@ fig4 <- df %>%
              label=sprintf("%sK", round(n/1000)))) +
     geom_bar(stat="identity") +
     geom_bar_text(place="top") +
-    barplot_theme +
+    non_flipped_theme +
     scale_fill_ipsum(na.value="grey") +
     labs(title="Number of manufactured cars, yearly",
          subtitle="The number of manufactured cars increased from 6,000 to 55,000 in 15 years.",
@@ -144,7 +145,7 @@ fig4 <- df %>%
          y="Number of manufactured cars")
 
 ggsave(plot = fig4,
-       dpi=300,
+       dpi=DPI,
        path = "./figures",
        filename = "fig4.png")
 
@@ -162,7 +163,7 @@ fig5 <- df %>%
              label=round(ratio))) +
   geom_bar(stat="identity") +
   geom_bar_text(position="stack", place="top") +
-  barplot_theme +
+  non_flipped_theme +
   scale_fill_ipsum(na.value="grey") +
   labs(title="Percentage of cars by fuel type, yearly",
        subtitle = "The percentage of diesel cars increased from 23% to 91% in 15 years",
@@ -171,7 +172,7 @@ fig5 <- df %>%
        fill="Fuel type")
 
 ggsave(plot = fig5,
-       dpi=300,
+       dpi=DPI,
        path = "./figures",
        filename = "fig5.png")
    
@@ -186,7 +187,7 @@ fig6 <- df %>%
               aes(x=as.factor(Année),
                   y=26,
                   label=round(median, 1))) +
-    barplot_theme +
+    non_flipped_theme +
     ylim(0, 30) +
     labs(title="Fuel consumption distribution, yearly",
          subtitle = "The median fuel consumption is slowly decreasing and narrowing yearly",
@@ -194,7 +195,7 @@ fig6 <- df %>%
          x="Year")
 
 ggsave(plot = fig6,
-       dpi=300,
+       dpi=DPI,
        path = "./figures",
        filename = "fig6.png")
 
@@ -207,7 +208,7 @@ fig7 <- df %>%
              y=Consommation.mixte)) +
     geom_violin() +
     coord_flip() +
-    flipped_barplot_theme +
+    flipped_theme +
     ylim(0, NA) +
     labs(title="Manufacturers with high fuel consumptions",
          subtitle = "Bentley, Ferrari and Lamborghini manufacture high consumption vehicles",
@@ -215,7 +216,7 @@ fig7 <- df %>%
          x="Manufacturer")
 
 ggsave(plot = fig7,
-       dpi=300,
+       dpi=DPI,
        path = "./figures",
        filename = "fig7.png")
     
@@ -227,7 +228,7 @@ fig8 <- df %>%
              y=Consommation.mixte)) +
   geom_violin() +
   coord_flip() +
-  flipped_barplot_theme +
+  flipped_theme +
   ylim(0, NA) +
   labs(title="Manufacturers with low fuel consumptions",
        subtitle = "Smart, Dacia and Renault Tech manufacture low consumption vehicles",
@@ -235,7 +236,7 @@ fig8 <- df %>%
        x="Manufacturer")
 
 ggsave(plot = fig8,
-       dpi=300,
+       dpi=DPI,
        path = "./figures",
        filename = "fig8.png")
 
@@ -244,7 +245,7 @@ fig9 <- df %>%
   ggplot(aes(x=CO2)) +
   geom_histogram(bins=50, 
                  color="black") +
-  barplot_theme +
+  non_flipped_theme +
   xlim(0, NA) +
   labs(title="CO2 emissions distribution",
        subtitle="The median C02 emissions was 213 gCO2/km",
@@ -252,7 +253,7 @@ fig9 <- df %>%
        y="Number of cars")
 
 ggsave(plot = fig9,
-       dpi=300,
+       dpi=DPI,
        path = "./figures",
        filename = "fig9.png")
 
@@ -285,7 +286,7 @@ fig10 <- df %>%
          fill="Car line")
 
 ggsave(plot = fig10,
-       dpi=300,
+       dpi=DPI,
        path = "./figures",
        filename = "fig10.png")
 
@@ -305,7 +306,7 @@ fig11 <- df %>%
          y="Fuel type")
 
 ggsave(plot = fig11,
-       dpi=300,
+       dpi=DPI,
        path = "./figures",
        filename = "fig11.png")
 
@@ -318,7 +319,7 @@ fig12 <- df %>%
              y=n,
              fill=Marque)) +
     geom_stream() +
-    barplot_theme +
+    non_flipped_theme +
     scale_fill_ipsum() +
     labs(title="Evolution of the number of cars by German manufacturers",
          subtitle="Mercedes growth happened in the early 2000s, VW later after 2010",
@@ -327,7 +328,7 @@ fig12 <- df %>%
          fill="Manufacturer")
 
 ggsave(plot = fig12,
-       dpi=300,
+       dpi=DPI,
        path = "./figures",
        filename = "fig12.png")
 
